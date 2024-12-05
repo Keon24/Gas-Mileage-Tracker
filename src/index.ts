@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import mileageRoutes from "./routes/MileageEntry"
 
 
 dotenv.config();
@@ -33,6 +34,8 @@ const db = mongoose.connection;
 db.on("error", (error) => {
     console.error('MongoDB error:', error);
 });
+
+app.use('/api/mileage',mileageRoutes)
 
 // Start the server
 app.listen(PORT, () => {

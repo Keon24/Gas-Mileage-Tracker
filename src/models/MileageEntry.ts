@@ -17,4 +17,4 @@ const MileageSchema: Schema = new Schema({
 
 const MileageEntry = mongoose.model<MileageEntry>("MileageEntry", MileageSchema);
 
-export default MileageSchema
+export default MileageEntry
