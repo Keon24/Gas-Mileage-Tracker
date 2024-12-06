@@ -44,8 +44,24 @@ router.post(
         } catch (error) {
             console.error('Error saving mileage entry:', error);
             res.status(500).json({ message: 'Failed to save mileage entry.' });
+            
         }
+       
+        router.get(
+            '/past-days', async ( req: Request, res: Response): Promise<void> => {
+               /* Caculate the past days */
+               const currentDate: Date = new Date()
+               const sevenDaysAgo: Date = new Date (currentDate);
+               sevenDaysAgo.setDate(currentDate.getDate()- 7);
+            /*Retrieve entries where date is greater or equal */
+               /* */
+               /* */
+               /* */
+            }
+        )
     }
+   
+
 );
 
 export default router;
