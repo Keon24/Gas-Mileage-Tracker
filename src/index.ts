@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import mileageRoutes from "./routes/MileageEntry"
 
 
+
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,7 @@ db.on("error", (error) => {
 });
 
 app.use('/api/mileage',mileageRoutes)
+
 
 // Start the server
 app.listen(PORT, () => {

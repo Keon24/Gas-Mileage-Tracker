@@ -1,5 +1,5 @@
 import MileageEntry from "../models/MileageEntry";
-import express, { Request, Router, Response } from 'express';
+import express, { Request, Router, Response } from "express";
 
 // Define the structure of the request body
 interface MileageEntryBody {
@@ -10,6 +10,7 @@ interface MileageEntryBody {
 
 const router: Router = express.Router();
 
+// POST: Add a new mileage entry
 router.post(
     '/add',
     async (req: Request<{}, {}, MileageEntryBody>, res: Response): Promise<void> => {
@@ -44,37 +45,43 @@ router.post(
         } catch (error) {
             console.error('Error saving mileage entry:', error);
             res.status(500).json({ message: 'Failed to save mileage entry.' });
-            
         }
-       
-        router.get(
-            '/past-days', async ( req: Request, res: Response): Promise<void> => {
-                try {
-                
-                /* Calculate the past days */
-               const currentDate: Date = new Date()
-               const sevenDaysAgo: Date = new Date (currentDate);
-               sevenDaysAgo.setDate(currentDate.getDate()- 7);
-                /* Find and compare the dates */
-                const entries = await MileageEntry.find({
-                    date: {
-                        $gte: sevenDaysAgo,
-                        $lte: currentDate,
-                    },
-                }).select('milesDriven, fuelAdded').sort({date: - 1})
-                res.status(200).json(entries)
-            } catch (error) {
-                    console.error("There was an error fetching your entries")
-                    res.status(500).json({message:"Failed to fetch mileage entries"});
-            }
-               /* */
-               /* */
-               /* */
-            }
-        )
     }
-   
+);
 
+// GET: Retrieve mileage entries from the past 7 days
+router.get(
+    '/past', // Define the endpoint path
+    async (req: Request, res: Response): Promise<void> => {
+        try {
+            /* Calculate the past days */
+            const currentDate: Date = new Date(); 
+            const sevenDaysAgo: Date = new Date(currentDate); 
+            sevenDaysAgo.setDate(currentDate.getDate() - 7); 
+
+            /* Find and compare the dates */
+            const entries = await MileageEntry.find({
+                date: {
+                    $gte: sevenDaysAgo, 
+                    $lte: currentDate,  
+                },
+            })
+                .select('milesDriven fuelAdded') 
+                .sort({ date: -1 }); 
+
+            // Check if no entries are found
+            if (entries.length === 0) {
+                res.status(200).json({ message: 'No entries found in the past 7 days.' });
+                return;
+            }
+
+            /* Return the entries */
+            res.status(200).json(entries);
+        } catch (error) {
+            console.error("There was an error fetching your entries:", error);
+            res.status(500).json({ message: "Failed to fetch mileage entries." });
+        }
+    }
 );
 
 export default router;
