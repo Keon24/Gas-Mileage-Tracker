@@ -84,4 +84,20 @@ router.get(
     }
 );
 
+router.put('/:id', async(res: Response, req: Request): Promise<void> => {
+    try {
+        const id: string  = req.params.id
+        const newUpdate: string = await MileageEntry.findById(id)
+        res.send(newUpdate)
+       /* Retrieve the id from req.params.*/
+/*Use findById to fetch the entry.*/
+/*Check if the entry exists (404 if not).*/
+/*Validate the request body to ensure it includes valid fields.*/
+/*Update only the fields provided in the request body*/
+/*Recalculate fuelEfficiency if necessary*/
+/*Save the updated entry and return it.*/
+    } catch (error) {
+        
+    }
+})
 export default router;
